@@ -1,0 +1,12 @@
+[1] Idle
+[2,3,4,5] Walk
+[6] Jump (Air)
+[7] Jump (Landing/Take-off)
+[8,9,10] Horizontal Fire
+[11,12] Vertical Fire (Up)
+[13,14] Vertical Fire (Down)
+[15,16] Diagonal Fire (Up)
+[17,18] Diagonal Fire (Down)
+[19] Recoil Jump
+[20] Hurt
+[21] Death
