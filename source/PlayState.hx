@@ -16,6 +16,8 @@ class PlayState extends FlxState
 	override public function create()
 	{
 		super.create();
+
+		setupWorld();
 	}
 
 	function setupWorld()
@@ -39,13 +41,13 @@ class PlayState extends FlxState
 				container.add(level.getBgSprite());
 
 			// Render layer "Background"
-			level.l_Cavern_background.render(container);
+			// level.l_Cavern_background.render(container);
 
 			// Render layer "Collisions"
-			level.l_Collisions.render(container);
+			level.l_Tiles.render(container); // l_Collisions.render(container);
 
 			// Render layer "Custom_Tiles"
-			level.l_Custom_tiles.render(container);
+			// level.l_Custom_tiles.render(container);
 		}
 	}
 
