@@ -126,6 +126,7 @@ class Player extends FlxSprite
 	{
 		acceleration.x = 0;
 		updateInput();
+		updateMP();
 		updateAnimations();
 		super.update(elapsed);
 	}
@@ -146,6 +147,14 @@ class Player extends FlxSprite
 			jump();
 		if (_shoot.triggered)
 			shoot();
+	}
+
+	function updateMP()
+	{
+		if (this.justTouched(FLOOR) && HUD.mp < HUD.maxMp)
+		{
+			HUD.mp = HUD.maxMp;
+		}
 	}
 
 	function updateAnimations():Void
@@ -285,10 +294,11 @@ class Player extends FlxSprite
 		{
 			// FlxG.sound.play(FlxAssets.getSound("assets/sounds/jam"));
 		}
-		else
+		else if (HUD.mp > 0)
 		{
 			getMidpoint(_point);
 			_bullets.recycle(Bullet.new).shoot(_point, _aim);
+			HUD.mp -= 1;
 
 			switch (_aim)
 			{
