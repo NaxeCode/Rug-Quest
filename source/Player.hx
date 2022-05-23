@@ -7,9 +7,9 @@ import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.input.actions.FlxAction;
 import flixel.input.actions.FlxActionManager;
 import flixel.system.FlxAssets;
-import flixel.util.FlxDirection;
 import flixel.util.FlxSpriteUtil;
 import flixel.util.FlxTimer;
+import utils.Flx8Direction;
 #if VIRTUAL_PAD
 import flixel.ui.FlxVirtualPad;
 import flixel.util.FlxDestroyUtil;
@@ -28,8 +28,8 @@ class Player extends FlxSprite
 	public var flickering:Bool = false;
 
 	var _shootTimer = new FlxTimer();
-	var _jumpPower:Int = 200;
-	var _aim = FlxDirection.RIGHT;
+	var _jumpPower:Int = 250;
+	var _aim = Flx8Direction.RIGHT;
 	var _gibs:FlxEmitter;
 	var _bullets:FlxTypedGroup<Bullet>;
 
@@ -56,15 +56,15 @@ class Player extends FlxSprite
 		setFacingFlip(RIGHT, false, false);
 
 		// Bounding box tweaks
-		width = 6;
-		height = 7;
-		offset.set(1, 1);
+		// width = 6;
+		// height = 7;
+		// offset.set(1, 1);
 
 		// Basic player physics
 		var runSpeed:Int = 80;
 		drag.x = runSpeed * 8;
 		acceleration.y = 420;
-		maxVelocity.set(runSpeed, _jumpPower);
+		maxVelocity.set(runSpeed * 3, _jumpPower);
 
 		// Animations
 		// animation.add(Animation.IDLE, [0]);
@@ -103,7 +103,7 @@ class Player extends FlxSprite
 
 		_jump = new FlxActionDigital().addGamepad(A, JUST_PRESSED).addKey(X, JUST_PRESSED);
 
-		_shoot = new FlxActionDigital().addGamepad(X, PRESSED).addKey(C, PRESSED);
+		_shoot = new FlxActionDigital().addGamepad(X, JUST_PRESSED).addKey(C, JUST_PRESSED);
 
 		#if VIRTUAL_PAD
 		virtualPad = new FlxVirtualPad(FULL, A_B);
@@ -234,24 +234,36 @@ class Player extends FlxSprite
 
 	function moveLeft():Void
 	{
-		facing = _aim = LEFT;
+		facing = 0x0001;
+		_aim = LEFT;
 		acceleration.x -= drag.x;
 	}
 
 	function moveRight():Void
 	{
-		facing = _aim = RIGHT;
+		facing = 0x0010;
+		_aim = RIGHT;
 		acceleration.x += drag.x;
 	}
 
 	function moveUp():Void
 	{
-		_aim = UP;
+		if (_left.triggered)
+			_aim = UPLEFT;
+		else if (_right.triggered)
+			_aim = UPRIGHT;
+		else
+			_aim = UP;
 	}
 
 	function moveDown():Void
 	{
-		_aim = DOWN;
+		if (_left.triggered)
+			_aim = DOWNLEFT;
+		else if (_right.triggered)
+			_aim = DOWNRIGHT;
+		else
+			_aim = DOWN;
 	}
 
 	function jump():Void
@@ -278,9 +290,32 @@ class Player extends FlxSprite
 			getMidpoint(_point);
 			_bullets.recycle(Bullet.new).shoot(_point, _aim);
 
-			if (_aim == DOWN)
+			switch (_aim)
 			{
-				velocity.y -= 36;
+				case DOWN:
+					velocity.y -= 100;
+
+				case DOWNLEFT:
+					velocity.y -= 100;
+					velocity.x += 350;
+				case DOWNRIGHT:
+					velocity.y -= 100;
+					velocity.x -= 350;
+
+				case LEFT:
+					velocity.x += 350;
+				case RIGHT:
+					velocity.x -= 350;
+
+				case UP:
+					velocity.y += 100;
+
+				case UPLEFT:
+					velocity.y += 100;
+					velocity.x += 350;
+				case UPRIGHT:
+					velocity.y += 100;
+					velocity.x -= 350;
 			}
 		}
 	}

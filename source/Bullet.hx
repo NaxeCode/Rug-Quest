@@ -5,6 +5,7 @@ import flixel.FlxSprite;
 import flixel.math.FlxPoint;
 import flixel.system.FlxAssets;
 import flixel.util.FlxDirection;
+import utils.Flx8Direction;
 
 class Bullet extends FlxSprite
 {
@@ -58,7 +59,7 @@ class Bullet extends FlxSprite
 		// animation.play("poof");
 	}
 
-	public function shoot(Location:FlxPoint, Aim:FlxDirection):Void
+	public function shoot(Location:FlxPoint, Aim:Flx8Direction):Void
 	{
 		// FlxG.sound.play(FlxAssets.getSound("assets/sounds/shoot"));
 
@@ -68,18 +69,42 @@ class Bullet extends FlxSprite
 
 		switch (Aim)
 		{
-			case UP:
-				// animation.play("up");
-				velocity.y = -_speed;
 			case DOWN:
-				// animation.play("down");
 				velocity.y = _speed;
+
+			case DOWNLEFT:
+				velocity.y = _speed;
+				velocity.x = -_speed;
+			case DOWNRIGHT:
+				velocity.y = _speed;
+				velocity.x = _speed;
+
 			case LEFT:
-				// animation.play("left");
 				velocity.x = -_speed;
 			case RIGHT:
-				// animation.play("right");
 				velocity.x = _speed;
+
+			case UP:
+				velocity.y = -_speed;
+
+			case UPLEFT:
+				velocity.y = -_speed;
+				velocity.x = -_speed;
+			case UPRIGHT:
+				velocity.y = -_speed;
+				velocity.x = _speed;
+
+				// case UP:
+				// animation.play("up");
+
+				// case DOWN:
+				// animation.play("down");
+
+				// case LEFT:
+				// animation.play("left");
+
+				// case RIGHT:
+				// animation.play("right");
 		}
 	}
 }
