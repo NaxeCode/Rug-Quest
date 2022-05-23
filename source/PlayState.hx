@@ -1,11 +1,13 @@
 package;
 
+import flixel.FlxCamera;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.effects.particles.FlxEmitter;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.group.FlxSpriteGroup;
+import flixel.util.FlxColor;
 
 class PlayState extends FlxState
 {
@@ -21,16 +23,39 @@ class PlayState extends FlxState
 	var tiles:FlxSpriteGroup;
 	var background:FlxSpriteGroup;
 
+	// Cameras
+	public static var gameCamera:FlxCamera;
+
+	private var hud:HUD;
+	var uiCamera:FlxCamera;
+
 	override public function create()
 	{
 		super.create();
 
+		setupCameras();
+		setupHUD();
 		setupGibs();
 		setupBullets();
 		setupWorld();
 		addGibs();
 		addPlayer();
 		addBullets();
+	}
+
+	function setupCameras()
+	{
+		gameCamera = new FlxCamera(0, 0, FlxG.width, FlxG.height);
+		uiCamera = new FlxCamera(0, 0, FlxG.width, FlxG.height);
+
+		gameCamera.bgColor = 0xFF17142d;
+		uiCamera.bgColor = FlxColor.TRANSPARENT;
+	}
+
+	function setupHUD()
+	{
+		hud = new HUD();
+		add(hud);
 	}
 
 	function setupGibs()
@@ -101,9 +126,6 @@ class PlayState extends FlxState
 		for (tile in collider)
 			tile.immovable = true;
 		add(collider);
-
-		// trace(level);
-		FlxG.camera.setScrollBoundsRect(0, 0, 4896, 1216, true);
 	}
 
 	function createEntities(entityLayer:LdtkProject.Layer_Entities)
@@ -151,7 +173,22 @@ class PlayState extends FlxState
 		// which will automatically set the boundaries of the world.
 		add(_player);
 
-		FlxG.camera.follow(_player, PLATFORMER);
+		enableCameras();
+	}
+
+	function enableCameras()
+	{
+		gameCamera.follow(_player, PLATFORMER);
+		gameCamera.zoom = 2;
+
+		FlxG.cameras.add(gameCamera);
+		FlxG.cameras.add(uiCamera, false);
+
+		gameCamera.cameras = [uiCamera];
+		gameCamera.camera.setScrollBoundsRect(0, 0, 4896, 1216, true);
+		hud.cameras = [uiCamera];
+
+		hud.scrollFactor.set(0, 0);
 	}
 
 	function addBullets()
