@@ -1,4 +1,4 @@
-package;
+package player;
 
 import flixel.FlxG;
 import flixel.FlxSprite;
@@ -9,6 +9,8 @@ import flixel.input.actions.FlxActionManager;
 import flixel.system.FlxAssets;
 import flixel.util.FlxSpriteUtil;
 import flixel.util.FlxTimer;
+import gameStates.HUD;
+import gameStates.Reg;
 import utils.Flx8Direction;
 #if VIRTUAL_PAD
 import flixel.ui.FlxVirtualPad;

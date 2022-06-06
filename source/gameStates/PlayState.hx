@@ -1,4 +1,4 @@
-package;
+package gameStates;
 
 import flixel.FlxCamera;
 import flixel.FlxG;
@@ -9,6 +9,8 @@ import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.group.FlxSpriteGroup;
 import flixel.math.FlxRect;
 import flixel.util.FlxColor;
+import player.Bullet;
+import player.Player;
 
 using flixel.util.FlxSpriteUtil;
 

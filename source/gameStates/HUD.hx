@@ -1,4 +1,4 @@
-package;
+package gameStates;
 
 import flixel.group.FlxSpriteGroup;
 import flixel.text.FlxText;
