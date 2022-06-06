@@ -7,7 +7,10 @@ import flixel.FlxState;
 import flixel.effects.particles.FlxEmitter;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.group.FlxSpriteGroup;
+import flixel.math.FlxRect;
 import flixel.util.FlxColor;
+
+using flixel.util.FlxSpriteUtil;
 
 class PlayState extends FlxState
 {
@@ -178,14 +181,28 @@ class PlayState extends FlxState
 
 	function enableCameras()
 	{
-		gameCamera.follow(_player, PLATFORMER);
+		gameCamera.follow(_player);
+		var w:Float = (gameCamera.width / 8);
+		var h:Float = (gameCamera.height / 5);
+		gameCamera.deadzone = FlxRect.get((gameCamera.width - w) / 2, (gameCamera.height - h) / 2 - h * 0.25, w, h);
 		gameCamera.zoom = 2;
+
+		var canvas = new FlxSprite();
+		canvas.makeGraphic(FlxG.width, FlxG.height, FlxColor.TRANSPARENT, true);
+		add(canvas);
+
+		var lineStyle:LineStyle = {color: FlxColor.RED, thickness: 1};
+		var drawStyle:DrawStyle = {smoothing: true};
+
+		canvas.drawRect(gameCamera.deadzone.x, gameCamera.deadzone.y, gameCamera.deadzone.width, gameCamera.deadzone.height, FlxColor.TRANSPARENT, lineStyle,
+			drawStyle);
 
 		FlxG.cameras.add(gameCamera);
 		FlxG.cameras.add(uiCamera, false);
 
 		gameCamera.cameras = [uiCamera];
 		gameCamera.camera.setScrollBoundsRect(0, 0, 4896, 1216, true);
+		canvas.cameras = [uiCamera];
 		hud.cameras = [uiCamera];
 
 		hud.scrollFactor.set(0, 0);
