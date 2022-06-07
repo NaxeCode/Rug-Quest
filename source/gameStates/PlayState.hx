@@ -1,8 +1,10 @@
 package gameStates;
 
+import enemy.base.BaseEnemy;
 import enemy.enemies.Slime;
 import flixel.FlxCamera;
 import flixel.FlxG;
+import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.effects.particles.FlxEmitter;
@@ -140,8 +142,12 @@ class PlayState extends FlxState
 		add(collider);
 	}
 
+	private var enemies:FlxSpriteGroup;
+
 	function createEntities(entityLayer:LdtkProject.Layer_Entities)
 	{
+		enemies = new FlxSpriteGroup();
+		add(enemies);
 		var x:Int;
 		var y:Int;
 
@@ -151,7 +157,7 @@ class PlayState extends FlxState
 			y = char.pixelY;
 
 			var enemy = new Slime(x, y, char.f_Health, char.f_Dmg);
-			add(enemy);
+			enemies.add(enemy);
 		}
 
 		// x = entityLayer.all_Noah[0].pixelX;
@@ -237,6 +243,21 @@ class PlayState extends FlxState
 	{
 		super.update(elapsed);
 
+		FlxG.overlap(enemies, _player, playerHurt);
 		FlxG.collide(collider, _player);
+	}
+
+	function playerHurt(enm:BaseEnemy, plr:Player)
+	{
+		plr.health -= enm.dmg;
+		if (plr.facing == FlxObject.LEFT)
+		{
+			plr.velocity.x += 50;
+		}
+		else if (plr.facing == FlxObject.RIGHT)
+		{
+			plr.velocity.x -= 50;
+		}
+		plr.velocity.y = -200;
 	}
 }
