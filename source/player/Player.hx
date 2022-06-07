@@ -42,7 +42,8 @@ class Player extends FlxSprite
 	var _left:FlxActionDigital;
 	var _right:FlxActionDigital;
 	var _shoot:FlxActionDigital;
-	var _jump:FlxActionDigital;
+
+	public var _jump:FlxActionDigital;
 
 	/**
 	 * This is the player object class.  Most of the comments I would put in here
@@ -68,7 +69,7 @@ class Player extends FlxSprite
 		var runSpeed:Int = 80;
 		drag.x = runSpeed * 8;
 		acceleration.y = 420;
-		maxVelocity.set(runSpeed * 3, _jumpPower);
+		maxVelocity.set(runSpeed * 3, _jumpPower * 2);
 
 		// Animations
 		var fps = 8;
