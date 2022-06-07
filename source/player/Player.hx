@@ -1,6 +1,7 @@
 package player;
 
 import flixel.FlxG;
+import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.effects.particles.FlxEmitter;
 import flixel.group.FlxGroup.FlxTypedGroup;
@@ -80,7 +81,7 @@ class Player extends FlxSprite
 		animation.add(Animation.SHOOT_UP, [10, 11], fps);
 		animation.add(Animation.SHOOT_DOWN, [12, 13], fps);
 		animation.add(Animation.SHOOT_DIAG_UP, [14, 15], fps);
-		animation.add(Animation.SHOOT_DIAG_UP, [16, 17], fps);
+		animation.add(Animation.SHOOT_DIAG_DOWN, [16, 17], fps);
 
 		animation.add(Animation.JUMP_RECOIL, [18], fps);
 		animation.add(Animation.HURT, [19], fps);
@@ -168,22 +169,65 @@ class Player extends FlxSprite
 
 	function updateAnimations():Void
 	{
-		if (velocity.y != 0)
+		var direction_x:Int; // negative = left, positive = right
+		if (velocity.x > 0)
+			direction_x = 1;
+		else if (velocity.x < 0)
+			direction_x = -1;
+		else
+			direction_x = 0;
+
+		var direction_y:Int; // negative = up, positive = down
+		if (velocity.y > 0)
+			direction_y = 1;
+		else if (velocity.y < 0)
+			direction_y = -1;
+		else
+			direction_y = 0;
+
+		if (isTouching(FlxObject.FLOOR))
 		{
-			animation.play(switch (_aim)
+			if (direction_x == 0)
 			{
-				case UP: Animation.JUMP_AIR;
-				case DOWN: Animation.JUMP_IDLE;
-				default: Animation.JUMP_AIR;
-			});
-		}
-		else if (velocity.x == 0)
-		{
-			animation.play(if (_aim == UP) Animation.SHOOT_UP else Animation.IDLE);
+				animation.play(if (_aim == UP)
+				{
+					Animation.SHOOT_UP;
+				} else if (_aim == DOWN)
+				{
+					Animation.SHOOT_DOWN;
+				} else
+				{
+					Animation.IDLE;
+				});
+			}
+			else
+			{
+				animation.play(if (_aim == UPLEFT || _aim == UPRIGHT)
+				{
+					Animation.SHOOT_DIAG_UP;
+				} else if (_aim == DOWNLEFT || _aim == DOWNRIGHT)
+				{
+					Animation.SHOOT_DIAG_DOWN;
+				} else
+				{
+					Animation.WALK;
+				});
+			}
 		}
 		else
 		{
-			animation.play(if (_aim == UP) Animation.SHOOT_DIAG_UP else Animation.WALK);
+			if (velocity.y < -50)
+			{
+				animation.play(Animation.JUMP_AIR);
+			}
+			if (velocity.y > -30 && velocity.y < 30)
+			{
+				animation.play(Animation.JUMP_IDLE);
+			}
+			else if (velocity.y > 30)
+			{
+				animation.play(Animation.JUMP_AIR);
+			}
 		}
 	}
 
