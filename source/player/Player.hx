@@ -51,16 +51,16 @@ class Player extends FlxSprite
 	{
 		super(x, y);
 
-		// loadGraphic(AssetPaths.spaceman__png, true, 8);
-		makeGraphic(16, 16);
+		loadGraphic(AssetPaths.scalene__png, true, 80, 50);
 
 		setFacingFlip(LEFT, true, false);
 		setFacingFlip(RIGHT, false, false);
 
 		// Bounding box tweaks
-		// width = 6;
-		// height = 7;
-		// offset.set(1, 1);
+		// centerOffsets(true);
+		width = 16;
+		height = 16;
+		offset.set(35, 30);
 
 		// Basic player physics
 		var runSpeed:Int = 80;
@@ -69,15 +69,22 @@ class Player extends FlxSprite
 		maxVelocity.set(runSpeed * 3, _jumpPower);
 
 		// Animations
-		// animation.add(Animation.IDLE, [0]);
-		// animation.add(Animation.IDLE_UP, [5]);
+		var fps = 10;
+		animation.add(Animation.IDLE, [0], fps);
+		animation.add(Animation.WALK, [1, 2, 3, 4], fps);
 
-		// animation.add(Animation.RUN, [1, 2, 3, 0], 12);
-		// animation.add(Animation.RUN_UP, [6, 7, 8, 5], 12);
+		animation.add(Animation.JUMP_AIR, [5], fps);
+		animation.add(Animation.JUMP_IDLE, [6], fps);
 
-		// animation.add(Animation.JUMP, [4]);
-		// animation.add(Animation.JUMP_UP, [9]);
-		// animation.add(Animation.JUMP_DOWN, [10]);
+		animation.add(Animation.SHOOT, [7, 8, 9], fps);
+		animation.add(Animation.SHOOT_UP, [10, 11], fps);
+		animation.add(Animation.SHOOT_DOWN, [12, 13], fps);
+		animation.add(Animation.SHOOT_DIAG_UP, [14, 15], fps);
+		animation.add(Animation.SHOOT_DIAG_UP, [16, 17], fps);
+
+		animation.add(Animation.JUMP_RECOIL, [18], fps);
+		animation.add(Animation.HURT, [19], fps);
+		animation.add(Animation.DEATH, [20], fps);
 
 		// Bullet stuff
 		_bullets = bullets;
@@ -163,20 +170,20 @@ class Player extends FlxSprite
 	{
 		if (velocity.y != 0)
 		{
-			/* animation.play(switch (_aim)
-				{
-					case UP: Animation.JUMP_UP;
-					case DOWN: Animation.JUMP_DOWN;
-					default: Animation.JUMP;
-			});*/
+			animation.play(switch (_aim)
+			{
+				case UP: Animation.JUMP_AIR;
+				case DOWN: Animation.JUMP_IDLE;
+				default: Animation.JUMP_AIR;
+			});
 		}
 		else if (velocity.x == 0)
 		{
-			// animation.play(if (_aim == UP) Animation.IDLE_UP else Animation.IDLE);
+			animation.play(if (_aim == UP) Animation.SHOOT_UP else Animation.IDLE);
 		}
 		else
 		{
-			// animation.play(if (_aim == UP) Animation.RUN_UP else Animation.RUN);
+			animation.play(if (_aim == UP) Animation.SHOOT_DIAG_UP else Animation.WALK);
 		}
 	}
 
@@ -348,10 +355,15 @@ class Player extends FlxSprite
 @:enum abstract Animation(String) to String
 {
 	var IDLE = "idle";
-	var IDLE_UP = "idle_up";
-	var JUMP = "jump";
-	var JUMP_UP = "jump_up";
-	var JUMP_DOWN = "jump_down";
-	var RUN = "run";
-	var RUN_UP = "run_up";
+	var WALK = "walk";
+	var JUMP_AIR = "jump_air";
+	var JUMP_IDLE = "jump_idle";
+	var SHOOT = "shoot";
+	var SHOOT_DOWN = "shoot_down";
+	var SHOOT_UP = "shoot_up";
+	var SHOOT_DIAG_UP = "shoot_diag_up";
+	var SHOOT_DIAG_DOWN = "shoot_diag_down";
+	var JUMP_RECOIL = "jump_recoil";
+	var HURT = "hurt";
+	var DEATH = "death";
 }
