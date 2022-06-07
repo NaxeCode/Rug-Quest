@@ -216,15 +216,15 @@ class Player extends FlxSprite
 		}
 		else
 		{
-			if (velocity.y < -50)
+			if (velocity.y < -100)
 			{
 				animation.play(Animation.JUMP_AIR);
 			}
-			if (velocity.y > -30 && velocity.y < 30)
+			if (velocity.y > -100 && velocity.y < 100)
 			{
 				animation.play(Animation.JUMP_IDLE);
 			}
-			else if (velocity.y > 30)
+			else if (velocity.y > 100)
 			{
 				animation.play(Animation.JUMP_AIR);
 			}
