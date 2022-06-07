@@ -214,6 +214,8 @@ class PlayState extends FlxState
 		hud.cameras = [uiCamera];
 
 		hud.scrollFactor.set(0, 0);
+
+		gameCamera.fade(FlxColor.BLACK, 0.1, true);
 	}
 
 	function addBullets()
