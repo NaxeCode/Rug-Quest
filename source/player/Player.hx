@@ -70,7 +70,7 @@ class Player extends FlxSprite
 		maxVelocity.set(runSpeed * 3, _jumpPower);
 
 		// Animations
-		var fps = 10;
+		var fps = 8;
 		animation.add(Animation.IDLE, [0], fps);
 		animation.add(Animation.WALK, [1, 2, 3, 4], fps);
 
@@ -189,10 +189,10 @@ class Player extends FlxSprite
 		{
 			if (direction_x == 0)
 			{
-				animation.play(if (_aim == UP)
+				animation.play(if (_shootTimer.active && _aim == UP)
 				{
 					Animation.SHOOT_UP;
-				} else if (_aim == DOWN)
+				} else if (_shootTimer.active && _aim == DOWN)
 				{
 					Animation.SHOOT_DOWN;
 				} else
@@ -202,10 +202,10 @@ class Player extends FlxSprite
 			}
 			else
 			{
-				animation.play(if (_aim == UPLEFT || _aim == UPRIGHT)
+				animation.play(if (_shootTimer.active && _aim == UPLEFT || _aim == UPRIGHT)
 				{
 					Animation.SHOOT_DIAG_UP;
-				} else if (_aim == DOWNLEFT || _aim == DOWNRIGHT)
+				} else if (_shootTimer.active && _aim == DOWNLEFT || _aim == DOWNRIGHT)
 				{
 					Animation.SHOOT_DIAG_DOWN;
 				} else
