@@ -38,6 +38,7 @@ class PlayState extends FlxState
 	{
 		super.create();
 
+		setupDebug();
 		setupCameras();
 		setupHUD();
 		setupGibs();
@@ -46,6 +47,11 @@ class PlayState extends FlxState
 		addGibs();
 		addPlayer();
 		addBullets();
+	}
+
+	function setupDebug()
+	{
+		FlxG.log.redirectTraces = true;
 	}
 
 	function setupCameras()
