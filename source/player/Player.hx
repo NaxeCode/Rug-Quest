@@ -31,6 +31,7 @@ class Player extends FlxSprite
 	public var flickering:Bool = false;
 
 	var _shootTimer = new FlxTimer();
+	var _shootAnimTimer = new FlxTimer();
 	var _jumpPower:Int = 250;
 	var _aim = Flx8Direction.RIGHT;
 	var _gibs:FlxEmitter;
@@ -189,29 +190,39 @@ class Player extends FlxSprite
 		{
 			if (direction_x == 0)
 			{
-				animation.play(if (_shootTimer.active && _aim == UP)
+				if (_shootAnimTimer.active)
 				{
-					Animation.SHOOT_UP;
-				} else if (_shootTimer.active && _aim == DOWN)
+					if (_aim == UP)
+					{
+						animation.play(Animation.SHOOT_UP);
+					}
+					else if (_aim == DOWN)
+					{
+						animation.play(Animation.SHOOT_DOWN);
+					}
+				}
+				else
 				{
-					Animation.SHOOT_DOWN;
-				} else
-				{
-					Animation.IDLE;
-				});
+					animation.play(Animation.IDLE);
+				}
 			}
 			else
 			{
-				animation.play(if (_shootTimer.active && _aim == UPLEFT || _aim == UPRIGHT)
+				if (_shootAnimTimer.active)
 				{
-					Animation.SHOOT_DIAG_UP;
-				} else if (_shootTimer.active && _aim == DOWNLEFT || _aim == DOWNRIGHT)
+					if (_aim == UPLEFT || _aim == UPRIGHT)
+					{
+						animation.play(Animation.SHOOT_DIAG_UP);
+					}
+					else if (_aim == DOWNLEFT || _aim == DOWNRIGHT)
+					{
+						animation.play(Animation.SHOOT_DIAG_DOWN);
+					}
+				}
+				else
 				{
-					Animation.SHOOT_DIAG_DOWN;
-				} else
-				{
-					Animation.WALK;
-				});
+					animation.play(Animation.WALK);
+				}
 			}
 		}
 		else
@@ -339,6 +350,8 @@ class Player extends FlxSprite
 
 	function shoot():Void
 	{
+		if (!_shootAnimTimer.active)
+			_shootAnimTimer.start(FIRE_RATE * 2);
 		if (_shootTimer.active)
 			return;
 		_shootTimer.start(FIRE_RATE);
@@ -349,7 +362,17 @@ class Player extends FlxSprite
 		}
 		else if (HUD.mp > 0)
 		{
-			getMidpoint(_point);
+			if (facing == LEFT)
+			{
+				getMidpoint(_point);
+				_point.set(_point.x - 20, _point.y);
+			}
+			else if (facing == RIGHT)
+			{
+				getMidpoint(_point);
+				_point.set(_point.x + 15, _point.y);
+			}
+
 			_bullets.recycle(Bullet.new).shoot(_point, _aim);
 			HUD.mp -= 1;
 
