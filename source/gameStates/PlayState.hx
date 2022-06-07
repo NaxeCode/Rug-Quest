@@ -1,5 +1,6 @@
 package gameStates;
 
+import enemy.enemies.Slime;
 import flixel.FlxCamera;
 import flixel.FlxG;
 import flixel.FlxSprite;
@@ -143,6 +144,15 @@ class PlayState extends FlxState
 	{
 		var x:Int;
 		var y:Int;
+
+		for (char in entityLayer.all_Enemy_1)
+		{
+			x = char.pixelX;
+			y = char.pixelY;
+
+			var enemy = new Slime(x, y, char.f_Health, char.f_Dmg);
+			add(enemy);
+		}
 
 		// x = entityLayer.all_Noah[0].pixelX;
 		// y = entityLayer.all_Noah[0].pixelY;
