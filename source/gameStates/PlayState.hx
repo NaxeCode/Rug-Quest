@@ -11,6 +11,7 @@ import flixel.effects.particles.FlxEmitter;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.group.FlxSpriteGroup;
 import flixel.math.FlxRect;
+import flixel.tile.FlxTilemap.FlxTilemap;
 import flixel.util.FlxColor;
 import player.Bullet;
 import player.Player;
@@ -206,7 +207,7 @@ class PlayState extends FlxState
 	function enableCameras()
 	{
 		gameCamera.follow(_player);
-		var w:Float = (gameCamera.width / 8);
+		var w:Float = (gameCamera.width / 64);
 		var h:Float = (gameCamera.height / 5);
 		gameCamera.deadzone = FlxRect.get((gameCamera.width - w) / 2, (gameCamera.height - h) / 2 - h * 0.25, w, h);
 		gameCamera.zoom = 2;

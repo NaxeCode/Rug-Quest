@@ -54,7 +54,7 @@ class Player extends FlxSprite
 	{
 		super(x, y);
 
-		loadGraphic(AssetPaths.scalene__png, true, 80, 50);
+		loadGraphic(AssetPaths.scalene_CLEAN_fixed__png, true, 80, 50);
 
 		setFacingFlip(LEFT, true, false);
 		setFacingFlip(RIGHT, false, false);
