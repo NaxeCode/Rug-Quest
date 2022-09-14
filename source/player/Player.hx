@@ -75,7 +75,7 @@ class Player extends FlxSprite
 		var fps = 8;
 		animation.add(Animation.IDLE, [0], fps);
 		animation.add(Animation.WALK, [1, 2, 3, 4], fps);
-
+		// 0.375
 		animation.add(Animation.JUMP_AIR, [5], fps);
 		animation.add(Animation.JUMP_IDLE, [6], fps);
 
@@ -171,6 +171,7 @@ class Player extends FlxSprite
 
 	function updateAnimations():Void
 	{
+		trace(_shootAnimTimer.active);
 		var direction_x:Int; // negative = left, positive = right
 		if (velocity.x > 0)
 			direction_x = 1;
@@ -352,7 +353,7 @@ class Player extends FlxSprite
 	function shoot():Void
 	{
 		if (!_shootAnimTimer.active)
-			_shootAnimTimer.start(FIRE_RATE * 2);
+			_shootAnimTimer.start(1);
 		if (_shootTimer.active)
 			return;
 		_shootTimer.start(FIRE_RATE);
@@ -366,12 +367,26 @@ class Player extends FlxSprite
 			if (facing == LEFT)
 			{
 				getMidpoint(_point);
-				_point.set(_point.x - 20, _point.y);
+				if (_aim == UPLEFT)
+				{
+					_point.set(_point.x - 20, _point.y - 20);
+				}
+				else
+				{
+					_point.set(_point.x - 20, _point.y);
+				}
 			}
 			else if (facing == RIGHT)
 			{
 				getMidpoint(_point);
-				_point.set(_point.x + 15, _point.y);
+				if (_aim == UPRIGHT)
+				{
+					_point.set(_point.x + 20, _point.y - 20);
+				}
+				else
+				{
+					_point.set(_point.x + 20, _point.y);
+				}
 			}
 
 			_bullets.recycle(Bullet.new).shoot(_point, _aim);
@@ -384,25 +399,25 @@ class Player extends FlxSprite
 
 				case DOWNLEFT:
 					velocity.y -= 100;
-					velocity.x += 350;
+					velocity.x += 300;
 				case DOWNRIGHT:
 					velocity.y -= 100;
-					velocity.x -= 350;
+					velocity.x -= 300;
 
 				case LEFT:
-					velocity.x += 350;
+					velocity.x += 300;
 				case RIGHT:
-					velocity.x -= 350;
+					velocity.x -= 300;
 
 				case UP:
 					velocity.y += 100;
 
 				case UPLEFT:
 					velocity.y += 100;
-					velocity.x += 350;
+					velocity.x += 300;
 				case UPRIGHT:
 					velocity.y += 100;
-					velocity.x -= 350;
+					velocity.x -= 300;
 			}
 		}
 	}
